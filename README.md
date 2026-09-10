@@ -31,12 +31,6 @@ python bank_account.py
 
 3. Open the Gradio link shown in the terminal.
 
-## Project Structure
-
-Bank-System/
-│
-├── bank.py
-└── README.md
 
 ## OOP Concepts Used
 
