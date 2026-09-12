@@ -8,6 +8,7 @@ A simple banking application built with Python OOP and Gradio.
 - Store customer name, email, and balance
 - Deposit money
 - Withdraw money
+- Transfer money
 - Display all accounts
 - Display the total number of accounts
 - Basic input validation
