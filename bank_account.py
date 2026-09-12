@@ -64,6 +64,29 @@ class BankAccount:
             f"Balance: ${self.balance:.2f}"
         )
 
+    # Transfer Method
+    def transfer(self, target_account, amount):
+
+        if amount <= 0:
+            return (
+                f"❌ Transfer amount must be greater than 0."
+            )
+        
+        if amount > self._balance:
+            return (
+                f"❌ Insufficient balance for transfer.\n"
+                f"Current balance : {self.balance}"
+            )
+
+        self._balance -= amount
+        target_account._balance += amount
+
+        return (
+            f"✅ Successfully transferred ${amount} to {target_account.name}"
+            f"✅ Your current balance : {self.balance}"
+        )
+
+
 
 # ==============================
 # Store Accounts
@@ -176,6 +199,28 @@ def withdraw_money(account_number, amount):
         return "❌ Please enter an amount."
 
     return account.withdraw(amount)
+
+# ==============================
+# Transfer Money
+# ==============================
+
+def transfer_money(sender_num, receiver_num, amount):
+
+    if sender_num == receiver_num:
+        return "❌ Cannot transfer money to the same account."
+
+    sender, error1 = get_account(sender_num)
+    if error1:
+        return f"Sender Error: {error1}"
+
+    receiver, error2 = get_account(receiver_num)
+    if error2:
+        return f"Receiver Error: {error2}"
+
+    if amount is None:
+        return "❌ Please enter an amount."
+
+    return sender.transfer(receiver, amount)
 
 
 # ==============================
@@ -335,6 +380,26 @@ with gr.Blocks(title="Simple Bank System") as app:
 
         )
 
+    # ==============================
+    # Transfer Tab
+    # ===============================
+    
+    with gr.Tab("Transfer Money"):
+
+        gr.Markdown("## Transfer Funds Between Accounts")
+
+        sender_input = gr.Number(label="Sender Account Number (From)", minimum=1, precision=0)
+        receiver_input = gr.Number(label="Receiver Account Number (To)", minimum=1, precision=0)
+        transfer_amount_input = gr.Number(label="Transfer Amount", minimum=0)
+
+        transfer_button = gr.Button("Transfer Money", variant="primary")
+        transfer_output = gr.Textbox(label="Transfer Result", lines=5)
+
+        transfer_button.click(
+            fn=transfer_money,
+            inputs=[sender_input, receiver_input, transfer_amount_input],
+            outputs=transfer_output
+        )
 
 # ==============================
 # Run Application
